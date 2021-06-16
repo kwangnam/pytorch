@@ -2364,6 +2364,15 @@ Tensor* tensorexpr::computeOperandValue(
     case aten::conv2d: {
       return computeConv2d(inputs, outputShape, outputType);
     } break;
+    case aten::addmm: {
+      return computeAddMM(inputs, outputShape, outputType);
+    } break;
+    case aten::mean: {
+      return computeMean(inputs, outputShape, outputType);
+    } break;
+    case aten::adaptive_avg_pool2d: {
+      return computeAdaptiveAvgPool2d(inputs, outputShape, outputType);
+    } break;
     default: {
       std::string msg =
           std::string("Unhandled node kind (in computeOperandValue): ") +
@@ -2472,6 +2481,9 @@ Tensor* TensorExprKernel::computeValue(const torch::jit::Value* v) {
     case aten::sum:
     case aten::softmax:
     case aten::log_softmax:
+    case aten::addmm:
+    case aten::mean:
+    case aten::adaptive_avg_pool2d:
     case aten::conv2d: {
       std::vector<ArgValue> argInputs;
       for (auto inp : inputs) {
